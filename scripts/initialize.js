@@ -4,20 +4,48 @@ const { default: axios } = require('axios');
 const { database } = require('../config/database');
 const { models, modelFields } = require('../src/models');
 const { streamFields } = require('../src/models/streams');
+const { Oauth } = require('../src/services/twitch');
+const { persistToken, getToken } = require('../util');
 let streams = [];
 const MAX_RECORDS = process.env.MAX_RECORDS ? process.env.MAX_RECORDS : 1000;
+const helpers = {
+  shuffle: arr => {
+    for (let i = arr.length - 1 ; i >= 0; i--) {
+      let random = Math.floor(Math.random() * i);
+      [arr[i], arr[random]] = [arr[random], arr[i]];
+    }
+  }
+};
 var config = {
   method: 'get',
   url: 'https://api.twitch.tv/helix/streams?first=100',
   headers: {
     'Client-Id': process.env.TW_CLIENTID,
-    Authorization: `Bearer ${process.env.TW_ACCESS_TOKEN}`
   }
 };
 let cursor = null;
+const newTokens = () => {
+  return new Promise((resolve, reject) => {
+    let token = getToken();
+    if (!token) {
+      token = process.env.TW_REFRESH_TOKEN;
+    }
+    Oauth.refreshToken(token)
+      .then(authPayload => {
+        console.log("Generated new tokens")
+        if (authPayload?.data?.refresh_token) {
+          persistToken(authPayload.data.refresh_token);
+        }
+        resolve(authPayload.data.access_token);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
 const shuffleAndInsert = async () => {
-  console.log(streams.length);
   if (streams.length) {
+    helpers.shuffle(streams);
     for (stream of streams) {
       if (stream[modelFields.streamFields.game_id]) {
         try {
@@ -37,7 +65,7 @@ const shuffleAndInsert = async () => {
     let count = await models.streams.count();
     if (count && count > MAX_RECORDS) {
       let deleteResponse = await database.query(`
-    DELETE FROM stream_stats.streams order by viewer_count asc limit ${count - MAX_RECORDS};
+    DELETE FROM stream_stats.streams ORDER BY viewer_count ASC LIMIT ${count - MAX_RECORDS};
     `);
       console.log(deleteResponse, 'deleted extra records');
     }
@@ -51,6 +79,8 @@ database.authenticate().then(() => {
       force: false
     })
     .then(async () => {
+      process.env.TW_ACCESS_TOKEN = await newTokens();
+      config.headers.Authorization = `Bearer ${process.env.TW_ACCESS_TOKEN}`
       for (let i = 0; i < 11; i++) {
         try {
           if (cursor) {
