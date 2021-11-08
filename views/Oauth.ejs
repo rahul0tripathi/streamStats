@@ -14,10 +14,13 @@
       <% } else { %>
       <h2>Ola <%- user_info.user_name %> !</h2>
       <script>
+        const ENV_HOST = location.protocol + '//' + location.host;
+        console.log(ENV_HOST)
         let user_info = <%- JSON.stringify(user_info) %>;
         let token = "<%- token %>";
         localStorage.setItem('app_token', token);
         localStorage.setItem('user_info', JSON.stringify(user_info));
+        window.location.replace(ENV_HOST);
       </script>
       <% } %>
     </center>

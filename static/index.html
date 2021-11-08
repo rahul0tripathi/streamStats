@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>streamStats</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mohave&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/index.js"></script>
+  </head>
+  <body style="background-image: linear-gradient(90deg, #00dbde 0%, #fc00ff 100%); background-repeat: no-repeat; background-attachment: fixed; height: 100%;font-family: 'Mohave', sans-serif;">
+    <nav>
+      <div class="nav-wrapper" style="background-color: black">
+        <a href="#" class="brand-logo center">streamStats</a>
+        <ul id="nav-mobile" class="right">
+          <a class="waves-effect waves-light btn" id="login-btn">Login</a>
+          <a class="waves-effect waves-teal btn-flatn" id="username" style="display: none"></a>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="game-stats" style="display: block">
+      <div class="row">
+        <div class="col s12 m3">
+          <div class="card-panel" style="background-color: black; color: white">
+            <center>
+              <h6>ODD COUNT</h6>
+              <p style="display: inline;"><h4 id="odd_count_memory" style="display: inline">0</h4> (MEMORY)</p>
+              <p style="display: inline;"><h4 id="odd_count_db" style="display: inline">0</h4> (DATABASE)</p>
+            </center>
+          </div>
+        </div>
+        <div class="col s12 m3">
+          <div class="card-panel" style="background-color: black; color: white">
+            <center>
+              <h6>EVEN COUNT</h6>
+              <p style="display: inline;"><h4 id="even_count_memory" style="display: inline">0</h4> (MEMORY)</p>
+              <p style="display: inline;"><h4 id="even_count_db" style="display: inline">0</h4> (DATABASE)</p>
+            </center>
+          </div>
+        </div>
+        <div class="col s12 m3">
+          <div class="card-panel" style="background-color: black; color: white">
+            <center>
+              <h6>MEDIAN VIEWS</h6>
+              <p style="display: inline;"><h4 id="median_count_memory" style="display: inline">0</h4> (MEMORY)</p>
+              <p style="display: inline;"><h4 id="median_count_db" style="display: inline">0</h4> (DATABASE)</p>
+            </center>
+          </div>
+        </div>
+        <div class="col s12 m3">
+          <div class="card-panel" style="background-color: black; color: white">
+            <center>
+              <h5>DUPLICATE COUNT</h5>
+              <p style="display: inline;"><h4 id="duplicate_count_memory" style="display: inline">0</h4> (MEMORY)</p>
+              <p style="display: inline;"><h4 id="duplicate_count_db" style="display: inline">0</h4> (DATABASE)</p>
+            </center>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+    <div class="streams " style="margin: 20px;">
+        <div class="card-panel" style="background-color: black; color: white">
+          <center> <span> <h4 style="display: inline;">Top Streams</h4>  <a class="waves-effect waves-light btn" id="asc" style="vertical-align: middle;">ASC</a>  <a class="waves-effect waves-light btn" id="desc" style="vertical-align: middle;">DESC</a> </span></center>
+        <table style="background-color: black; color: white;backdrop-filter: blur(10px);" class="centered highlight responsive-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>views</th>
+                <th>Game</th>
+                <th>User</th>
+              </tr>
+            </thead>
+            <tbody id="streams-body">
+            </tbody>
+          </table>
+          </div>
+    </div>
+    <div class="gameStats"  style="margin: 20px;">
+      <div class="card-panel" style="background-color: black;color:white;">
+        <center> <span> <h4 style="display: inline;">Game Stats</h4>  </span></center>
+        <table style="background-color: transparent; color: white;backdrop-filter: blur(10px);" class="centered highlight responsive-table">
+          <thead>
+            <tr>
+              <th>Game</th>
+              <th>Total Streams</th>
+              <th>Max views</th>
+            </tr>
+          </thead>
+          <tbody id="game-stats-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
