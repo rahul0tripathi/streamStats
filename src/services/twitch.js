@@ -7,7 +7,7 @@ const Oauth = axios.create({
 const verifyOauth = ({ code = null }) => {
   return new Promise((resolve, reject) => {
     if (code) {
-      Oauth.post('/token', {
+      Oauth.post('/token', null, {
         params: {
           client_id: process.env.TW_CLIENTID,
           client_secret: process.env.TW_CLIENTSECRET,
@@ -18,7 +18,6 @@ const verifyOauth = ({ code = null }) => {
       })
         .then(tokenResponse => {
           if (tokenResponse.data?.access_token) {
-            console.log(tokenResponse.access_token, 'token', tokenResponse.data);
             Oauth.get('/validate', {
               headers: {
                 Authorization: `Bearer ${tokenResponse.data.access_token}`
@@ -44,6 +43,7 @@ const verifyOauth = ({ code = null }) => {
           }
         })
         .catch(err => {
+          console.log(err);
           reject(formatAxiosError(err));
         });
     } else {
@@ -59,7 +59,7 @@ const verifyOauth = ({ code = null }) => {
   });
 };
 const refreshToken = refreshToken => {
-  return Oauth.post('/token',null, {
+  return Oauth.post('/token', null, {
     params: {
       grant_type: 'refresh_token',
       refresh_token: refreshToken,

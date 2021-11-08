@@ -8,7 +8,7 @@ const getModelAttributes = (model = {}) => {
 };
 const formatAxiosError = ({ data: { status = 500, message = 'INTERNAL SERVER ERROR' } = {} }) => {
   return {
-    code,
+    status,
     message
   };
 };
