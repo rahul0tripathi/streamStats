@@ -47,7 +47,6 @@ const handleOauthCallback = (req, res, next) => {
         }
       })
       .catch(err => {
-          console.log(err)
         res.render('Oauth', {
           status: 500,
           user_info: {},
@@ -59,7 +58,25 @@ const handleOauthCallback = (req, res, next) => {
     console.log(err);
   }
 };
-
+const verifyToken = (req, res, next) => {
+  let token = req.headers['x-access-token'] || req.headers['authorization'];
+  if (token) {
+    if (token.startsWith('Bearer ')) {
+      token = token.slice(7, token.length);
+    }
+    jwt.verify(token, SIGNATURE, (err, parsedData) => {
+      if (err) {
+        res.sendStatus(401);
+      } else {
+        req.session = parsedData;
+        next();
+      }
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
 module.exports = {
-  handleOauthCallback
+  handleOauthCallback,
+  verifyToken
 };
