@@ -193,11 +193,11 @@ const statsCache = new Cache({
   ttl: 10000
 });
 const getStatsByGames = (req, res, next) => {
-  if (req.query.memory) {
+  if (req.query.memory == 'true' || req.query.memory == true) {
     statsCache
       .data()
       .then(stats => {
-        res.send(formatResponse(200, stats, 'successfully fetched game stats'));
+        res.send(formatResponse(200, stats, 'successfully fetched game stats from memory'));
       })
       .catch(err => {
         res.send(formatResponse(500, null, err));
@@ -207,7 +207,7 @@ const getStatsByGames = (req, res, next) => {
       .then(allStreamStats => {
         getGameStatsFromDatabase()
           .then(statsByGame => {
-            res.send(formatResponse(200, { statsByGame, allStreamStats }, 'successfully fetched game stats'));
+            res.send(formatResponse(200, { statsByGame, allStreamStats }, `successfully fetched game stats from database`));
           })
           .catch(err => {
             console.log(err);
@@ -220,6 +220,7 @@ const getStatsByGames = (req, res, next) => {
       });
   }
 };
+
 const flushAll = () => {
   streamsCache.flush();
   statsCache.flush();

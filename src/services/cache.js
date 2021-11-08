@@ -1,7 +1,7 @@
 //cache class imitates a caching system to prevent frequent calls to the database
 //It can be replaced by any other caching system such as redis or memcached
 class Cache {
-  datasource = Promise;
+  datasource = Promise
   storage = null;
   ttl = 10000;
   expireAt = new Date();
@@ -13,13 +13,13 @@ class Cache {
     },
     ttl = 10000
   }) {
-    this.datasource = source();
+    this.datasource = source;
     this.ttl = ttl;
   }
   data = (refresh = false) => {
     return new Promise((resolve, reject) => {
       if (this.expireAt < new Date() || refresh || !this.storage) {
-        this.datasource
+        this.datasource()
           .then(data => {
             if (data) {
               this.storage = data;
@@ -31,7 +31,6 @@ class Cache {
             reject(err);
           });
       } else {
-        console.log("STALE")
         resolve(this.storage);
       }
     });
