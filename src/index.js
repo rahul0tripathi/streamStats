@@ -1,5 +1,3 @@
-
-
 require('dotenv').config();
 
 const express = require('express'),
@@ -10,9 +8,11 @@ const express = require('express'),
     models: { user, streams }
   } = require('./models'),
   { default: axios } = require('axios');
-  const { apiRouter } = require('./routes');
+const { apiRouter } = require('./routes');
+require('./jobs')
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
+app.use('/', express.static(path.join(__dirname, '../static')));
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.status(err.status || 500);
@@ -23,7 +23,7 @@ app.use((err, req, res, next) => {
     }
   });
 });
-app.use('/',apiRouter)
+app.use('/', apiRouter);
 //Connect and sync sequelize
 database.authenticate().then(() => {
   console.log('Connected to database');
