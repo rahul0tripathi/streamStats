@@ -44,3 +44,6 @@ Stats are calculated in to ways
 - Due to Caching there might me differences in the values present in memory and database when the seeding job is running which will be resolved once the cache time expires or the job finishes
 - For any queries regarding the project mail me rahultripathidev@gmail.com
 
+## Screenshots
+![enter image description here](https://raw.githubusercontent.com/rahul0tripathi/streamStats/master/static/img/1.png)![enter image description here](https://raw.githubusercontent.com/rahul0tripathi/streamStats/master/static/img/3.png)
+![enter image description here](https://raw.githubusercontent.com/rahul0tripathi/streamStats/master/static/img/0.png)
